@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .container {
+        width: 1000px;
+        margin: 0 auto;
+    }
+
+    .object3 {
+        display: flex;
+    }
+
+    .object3 input {
+        width: 100%;
+        display: block;
+    }
+
+    .sub-btn {
+        padding-top: 20px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1>手机问卷调查</h1>
+        <hr>
+        <div class="item">
+            <h3>手机型号是什么</h3>
+            <p>
+                <label>
+                    <input type="radio" name="object1" value="0">华为
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="object1" value="1">小米
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="object1" value="2">iPhone
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="object1" value="3">OPPO
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="object1" value="4">vivo
+                </label>
+            </p>
+        </div>
+        <div class="item">
+            <h3>喜欢手机软件有哪些</h3>
+            <p>
+                <label>
+                    <input type="checkbox" name="object2" value="0">社交（微信、QQ）
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox" name="object2" value="1">短视频（抖音、快手、腾讯微视）
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox" name="object2" value="2">新闻（头条、微博）
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox" name="object2" value="3">学习
+                </label>
+            </p>
+        </div>
+        <div class="item ">
+            <h3>手机价格</h3>
+            <div class="object3">
+                <b>2000</b>
+                <input type="range" name="object3" max="20000" min="500" step="10" value="2000">
+            </div>
+        </div>
+        <div class="sub-btn">
+            <button id="btn">提交</button>
+        </div>
+    </div>
+
+    <script src="lib/jquery.min.js"></script>
+    <script>
+        function objVal() {
+            var arr = []
+            $("input[name=object2]:checked").each(function () {
+                arr.push($(this).val());
+            })
+            return arr;
+        }
+        $("input[name=object3]").bind("input", function () {
+            $(this).prev("b").html($(this).val())
+        })
+        $("#btn").click(function () {
+            if (!$("input[name=object1]:checked").val() || !objVal() || !$("input[name=object3]").val()) {
+                alert("请完善信息再提交")
+                return;
+            }
+            $.post({
+                "traditional": true,
+                "url": "/form",
+                "data": {
+                    "object1": $("input[name=object1]:checked").val(),
+                    //"object2": JSON.stringify(objVal())
+                    "object2": objVal(),
+                    "object3": $("input[name=object3]").val()
+                },
+                "success": function (result) {
+                    if (result.result == "success") {
+                        alert("提交成功")
+                    }
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
