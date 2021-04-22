@@ -22,4 +22,12 @@ app.post("/form",function (req,res) {
         })
      })
 })
+app.get("/object:id",function (req,res) {
+    console.log(req.params.id)
+    if(req.paramms.id == 1){
+        Survey.count({"object1":"0"},function (err,count_0) {
+            console.log(count_0)
+        })
+    }
+})
 app.listen(3000)
